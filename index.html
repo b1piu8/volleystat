@@ -23,6 +23,25 @@ html,body{background:var(--green);color:var(--text);font-family:var(--fb);height
 .nb.active{background:var(--acc);color:#000;border-color:var(--acc);}
 .spacer{flex:1;}
 
+/* HOME PAGE */
+.home-page{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:30px 24px;flex:1;}
+.home-logo{font-family:var(--fh);font-size:52px;font-weight:900;letter-spacing:3px;color:#fff;text-align:center;line-height:1;margin-bottom:10px;}
+.home-logo span{color:var(--acc);}
+.home-logo-sub{font-family:var(--fh);font-size:14px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;text-align:center;margin-top:2px;margin-bottom:30px;}
+.home-btn{width:100%;max-width:320px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);color:#fff;font-family:var(--fh);font-size:22px;font-weight:800;padding:20px 28px;border-radius:14px;cursor:pointer;text-transform:uppercase;letter-spacing:2px;text-align:left;transition:all .15s;display:flex;align-items:center;gap:14px;}
+.home-btn:active{transform:scale(.97);background:rgba(255,255,255,.18);}
+.home-btn.primary{background:rgba(245,166,35,.2);border-color:rgba(245,166,35,.6);color:var(--acc);}
+.home-btn .home-btn-icon{font-size:28px;width:36px;text-align:center;}
+.home-btn .home-btn-label{flex:1;}
+.home-btn .home-btn-arrow{color:var(--muted);font-size:18px;}
+
+/* Time Out buttons */
+.timeout-area{display:flex;gap:6px;margin-bottom:6px;}
+.to-btn{flex:1;background:rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.15);border-radius:8px;color:var(--muted);font-family:var(--fh);font-size:12px;font-weight:800;padding:7px 4px;cursor:pointer;text-align:center;text-transform:uppercase;letter-spacing:.5px;transition:all .15s;user-select:none;}
+.to-btn.used1{background:rgba(245,166,35,.25);border-color:rgba(245,166,35,.7);color:var(--acc);}
+.to-btn.used2{background:rgba(245,166,35,.45);border-color:var(--acc);color:var(--acc);}
+.to-btn:active{transform:scale(.95);}
+
 /* PAGES */
 .page{display:none;flex:1;overflow:hidden;}
 .page.active{display:flex;}
@@ -104,14 +123,15 @@ html,body{background:var(--green);color:var(--text);font-family:var(--fb);height
 .fb-app{background:#003d35;color:#1abc9c;border-color:#006b5c;}
 
 /* Effect grid */
-.eff-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.4vw;}
-.eg{border:none;border-radius:.8vw;padding:.8vw .2vw;cursor:pointer;font-family:var(--fh);font-size:2.2vw;font-weight:900;text-align:center;transition:all .12s;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:.2vw;}
-.eg-lbl{font-family:var(--fh);font-size:.9vw;font-weight:700;text-transform:uppercase;letter-spacing:.03vw;}
+.eff-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.3vw;}
+.eg{border:none;border-radius:.8vw;padding:.6vw .1vw;cursor:pointer;font-family:var(--fh);font-size:1.9vw;font-weight:900;text-align:center;transition:all .12s;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:.15vw;}
+.eg-lbl{font-family:var(--fh);font-size:.78vw;font-weight:700;text-transform:uppercase;letter-spacing:.02vw;}
 .eg:active{transform:scale(.85);}
 .eg-pt{background:#0d3d25;color:#27ae60;border-color:#1a6b3a;}
 .eg-pos{background:#0d3a5c;color:#3498db;border-color:#1a5276;}
 .eg-neg{background:#3d1a6b;color:#c39bd3;border-color:#6b2fa0;}
 .eg-err{background:#4a0d0d;color:#e74c3c;border-color:#7b1212;}
+.eg-gen{background:#2e1a0a;color:#c8860a;border-color:#7a4e10;}
 
 /* Opponent panel */
 .panel-opp{background:var(--navy2);border:2px solid #3d1515;border-radius:1.2vw;padding:1vw;position:relative;overflow:hidden;}
@@ -222,6 +242,29 @@ html,body{background:var(--green);color:var(--text);font-family:var(--fb);height
 .arch-del-btn{background:rgba(231,76,60,.2);border:1px solid rgba(231,76,60,.4);color:#e74c3c;font-family:var(--fh);font-size:10px;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer;text-transform:uppercase;letter-spacing:.3px;}
 .arch-del-btn:active{transform:scale(.95);}
 .arch-empty{padding:40px 20px;text-align:center;color:var(--muted);font-family:var(--fh);font-size:13px;text-transform:uppercase;letter-spacing:.5px;}
+
+/* Team roster cards */
+.team-card{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.tc-name{font-family:var(--fh);font-size:16px;font-weight:800;color:#fff;flex:1;text-transform:uppercase;letter-spacing:.5px;}
+.tc-count{font-family:var(--fh);font-size:12px;color:var(--muted);margin-right:8px;}
+.tc-btns{display:flex;gap:5px;align-items:center;}
+.tc-btn{font-family:var(--fh);font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;text-transform:uppercase;border:1px solid;}
+.tc-btn.edit{background:rgba(52,152,219,.2);border-color:rgba(52,152,219,.5);color:#3498db;}
+.tc-btn.del{background:rgba(231,76,60,.2);border-color:rgba(231,76,60,.5);color:#e74c3c;}
+.tc-btn.sel{background:rgba(39,174,96,.2);border-color:rgba(39,174,96,.5);color:#27ae60;}
+.tc-btn.active-sel{background:rgba(39,174,96,.4);border-color:#27ae60;color:#27ae60;}
+.tc-active-badge{font-family:var(--fh);font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);color:var(--acc);white-space:nowrap;}
+.current-team-banner{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-family:var(--fh);font-size:13px;color:var(--acc);text-transform:uppercase;letter-spacing:.5px;}
+.current-team-banner b{color:#fff;}
+
+/* Libero swap modal */
+.lib-swap-row{display:flex;align-items:center;gap:8px;padding:8px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);border-radius:8px;margin-bottom:6px;cursor:pointer;}
+.lib-swap-row:active{background:rgba(168,85,247,.2);}
+.lib-tok{width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,.3);border:2px solid rgba(168,85,247,.6);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:16px;font-weight:900;color:#fff;flex-shrink:0;}
+.lib-info{flex:1;}
+.lib-name{font-family:var(--fh);font-size:14px;font-weight:800;color:#fff;}
+.lib-status{font-size:11px;color:var(--muted);margin-top:1px;}
+.lib-active-dot{width:8px;height:8px;border-radius:50%;background:#27ae60;flex-shrink:0;}
 
 /* Backup page */
 .bk-card{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:18px;margin-bottom:14px;}
@@ -711,17 +754,47 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 <!-- TOP NAV -->
 <div class="topnav">
   <div class="logo">Volley<span>Stat</span></div>
-  <button class="nb active" id="nb-match" onclick="goPage('match')">Campo</button>
+  <button class="nb active" id="nb-home" onclick="goPage('home')">Home</button>
+  <button class="nb" id="nb-match" onclick="goPage('match')">Campo</button>
   <button class="nb" id="nb-roster" onclick="goPage('roster')">Roster</button>
-  <button class="nb" id="nb-teams" onclick="goPage('teams')">Squadre</button>
   <button class="nb" id="nb-setup" onclick="goPage('setup')">Gara</button>
   <button class="nb" id="nb-stats" onclick="goPage('stats')">Stats</button>
   <button class="nb" id="nb-archive" onclick="goPage('archive')">Archivio</button>
   <button class="nb" id="nb-backup" onclick="goPage('backup')">Backup</button>
 </div>
 
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="page-home">
+  <div class="home-page">
+    <div>
+      <div class="home-logo">Volley<span>Stat</span></div>
+      <div class="home-logo-sub">Statistiche Pallavolo</div>
+    </div>
+    <button class="home-btn primary" onclick="goPage('setup')">
+      <span class="home-btn-icon">🏐</span>
+      <span class="home-btn-label">Nuova Partita</span>
+      <span class="home-btn-arrow">›</span>
+    </button>
+    <button class="home-btn" onclick="goPage('roster')">
+      <span class="home-btn-icon">👥</span>
+      <span class="home-btn-label">Roster</span>
+      <span class="home-btn-arrow">›</span>
+    </button>
+    <button class="home-btn" onclick="goPage('archive')">
+      <span class="home-btn-icon">📋</span>
+      <span class="home-btn-label">Archivio</span>
+      <span class="home-btn-arrow">›</span>
+    </button>
+    <button class="home-btn" onclick="goPage('backup')" style="opacity:.7;font-size:16px;padding:14px 20px;">
+      <span class="home-btn-icon" style="font-size:20px">💾</span>
+      <span class="home-btn-label">Backup</span>
+      <span class="home-btn-arrow">›</span>
+    </button>
+  </div>
+</div>
+
 <!-- ===== MATCH PAGE ===== -->
-<div class="page active" id="page-match">
+<div class="page" id="page-match">
   <!-- LEFT -->
   <div class="left-col">
     <!-- Header: rot + score -->
@@ -762,13 +835,23 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   <div class="right-col">
     <!-- MY TEAM PANEL -->
     <div class="panel">
-      <button class="sub-btn" id="sub-btn" onclick="toggleSub()">⇄ Sostituzione</button>
+      <button class="sub-btn" id="sub-btn" onclick="toggleSub()" style="width:100%">⇄ Sostituzione</button>
       <div class="panel-title">La mia squadra</div>
 
       <!-- Selected player -->
       <div class="sel-player-row">
         <div class="sel-tok" id="sel-tok">?</div>
         <div class="sel-info" id="sel-info">Tocca un giocatore sul campo</div>
+      </div>
+
+      <!-- Time Out -->
+      <div class="timeout-area">
+        <button class="to-btn" id="to-btn-1" onclick="callTimeout()" title="Time Out (tocca per segnare, tieni premuto per azzerare)">
+          ⏱ Time Out 1
+        </button>
+        <button class="to-btn" id="to-btn-2" style="opacity:.4" onclick="callTimeout()" title="Time Out 2">
+          ⏱ Time Out 2
+        </button>
       </div>
 
       <!-- Fondamentale -->
@@ -797,6 +880,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         <button class="eg eg-err" onclick="doEffect('errore')" title="Errore = punto avversari">
           <span>=</span><span class="eg-lbl">Errore</span>
         </button>
+        <button class="eg eg-gen" onclick="doEffect('errore_gen')" title="Errore generico (no stat, punto avversari)">
+          <span>💩</span><span class="eg-lbl">Errore</span>
+        </button>
       </div>
       <!-- ANNULLA + FINE SET -->
       <div class="action-bottom-row">
@@ -823,8 +909,19 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 <!-- ===== ROSTER PAGE ===== -->
 <div class="page" id="page-roster">
   <div class="scroll-page">
-    <div class="sec-lbl">Aggiungi giocatore</div>
+    <!-- Selezione squadra attiva -->
+    <div class="current-team-banner" id="current-team-banner">
+      <span>📋</span>
+      <span>Squadra: <b id="current-team-label">–</b></span>
+    </div>
+    <div class="sec-lbl">Gestisci squadre</div>
     <div class="irow">
+      <input class="ifield" id="squad-in-name" type="text" placeholder="Nome squadra (es. Under16)">
+      <button class="abtn" onclick="addSquad()">+</button>
+    </div>
+    <div id="squad-list"></div>
+    <div class="sec-lbl" id="roster-section-lbl" style="display:none">Rosa: <span id="rc">0</span> giocatori</div>
+    <div class="irow" id="roster-add-row" style="display:none">
       <input class="ifield w60" id="in-num" type="number" placeholder="##" min="1" max="99">
       <input class="ifield" id="in-name" type="text" placeholder="Nome">
       <select class="ifield w110" id="in-role">
@@ -837,37 +934,30 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
       </select>
       <button class="abtn" onclick="addToRoster()">+</button>
     </div>
-    <div class="sec-lbl">Rosa (<span id="rc">0</span>)</div>
     <div id="roster-list"></div>
-    <button class="abtn full sec" onclick="if(confirm('Azzerare tutto?'))clearAll()">Azzera tutto</button>
-  </div>
-</div>
-
-<!-- ===== TEAMS PAGE ===== -->
-<div class="page" id="page-teams">
-  <div class="scroll-page">
-    <div class="sec-lbl">Aggiungi squadra avversaria</div>
-    <div class="irow">
-      <input class="ifield" id="team-in-name" type="text" placeholder="Nome squadra">
-      <button class="abtn" onclick="addTeam()">+</button>
-    </div>
-    <div class="sec-lbl">Squadre salvate (<span id="teams-count">0</span>)</div>
-    <div id="teams-list"></div>
   </div>
 </div>
 
 <!-- ===== SETUP PAGE ===== -->
 <div class="page" id="page-setup">
   <div class="scroll-page">
-    <div class="sec-lbl">Nome mia squadra</div>
+    <div class="sec-lbl">Squadra</div>
     <div class="irow">
-      <input class="ifield" id="my-team-name" type="text" placeholder="Es: Volley Club Milano">
-    </div>
-    <div class="sec-lbl">Squadra avversaria</div>
-    <div class="irow">
-      <select class="ifield" id="opp-team-sel">
-        <option value="">Seleziona avversario...</option>
+      <select class="ifield" id="my-squad-sel" onchange="onMySquadChange()">
+        <option value="">Seleziona la tua squadra...</option>
       </select>
+    </div>
+    <div class="sec-lbl">Avversario</div>
+    <div class="irow">
+      <input class="ifield" id="opp-team-input" type="text" placeholder="Nome squadra avversaria" style="flex:1">
+    </div>
+    <div class="sec-lbl">Campionato</div>
+    <div class="irow">
+      <input class="ifield" id="match-championship" type="text" placeholder="Es: Serie C, Under 16...">
+    </div>
+    <div class="irow" style="gap:6px">
+      <input class="ifield" id="match-date" type="date" style="flex:1">
+      <input class="ifield" id="match-location" type="text" placeholder="Luogo" style="flex:1">
     </div>
     <div class="sec-lbl">1. Seleziona 14 convocati</div>
     <div class="pg-grid" id="conv-grid"></div>
@@ -996,6 +1086,18 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   </div>
 </div>
 
+<!-- LIBERO SWAP MODAL -->
+<div class="ov h" id="libero-modal">
+  <div class="modal">
+    <div class="mt">🟣 Sostituzione Libero</div>
+    <div style="font-size:12px;color:var(--muted);font-family:var(--fh);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Scegli il Libero attivo</div>
+    <div id="libero-options"></div>
+    <div class="mbtns" style="margin-top:10px">
+      <button class="mbtn cn" onclick="closeLiberoModal()">Annulla</button>
+    </div>
+  </div>
+</div>
+
 <!-- SET END MODAL -->
 <div class="ov h" id="set-end-modal">
   <div class="modal">
@@ -1022,8 +1124,16 @@ var setHistory=[],subLog=[],scoreHistory=[];
 var selectedNum=null,selectedFund=null,lastStat=null;
 var subMode=false,subOutNum=null,subInNum=null;
 var liberoOut=false;
+// Libero2: supporto per 2 liberi
+var libero2=''; // secondo libero (opzionale)
+// Time out (resettati ogni set)
+var timeoutCount=0; // 0,1,2
 var myTeamName='Noi',oppTeamName='Avversari';
+var matchDate='',matchLocation='',matchChampionship='';
 var savedTeams=[],archive=[];
+// Multi-roster: squads = [{name, roster:[]}]
+var squads=[]; // squadre con propri roster
+var activeSquadIdx=-1; // indice squadra selezionata (-1=nessuna)
 
 var ZONE_ORDER=[4,3,2,5,6,1]; // display: top-left to bottom-right
 var ROT_NAMES=['P1','P6','P5','P4','P3','P2'];
@@ -1046,6 +1156,7 @@ function loadState(){
   roster=lj('vs15_r',[]);stats=lj('vs15_s',{});oppStats=lj('vs15_os',{});
   statsBySet=lj('vs15_sbs',{});oppStatsBySet=lj('vs15_osbs',{});
   convoked=lj('vs15_c',[]);starters=lj('vs15_st',[]);libero=localStorage.getItem('vs15_l')||'';
+  libero2=localStorage.getItem('vs15_l2')||'';
   roleAssign=lj('vs15_ra',{});
   curRot=parseInt(localStorage.getItem('vs15_rot')||'0');
   window._startRot=parseInt(localStorage.getItem('vs15_sr')||'0');
@@ -1061,6 +1172,12 @@ function loadState(){
   archive=lj('vs15_arch',[]);
   myTeamName=localStorage.getItem('vs15_myname')||'Noi';
   oppTeamName=localStorage.getItem('vs15_oppname')||'Avversari';
+  matchDate=localStorage.getItem('vs15_mdate')||'';
+  matchLocation=localStorage.getItem('vs15_mloc')||'';
+  matchChampionship=localStorage.getItem('vs15_mchamp')||'';
+  timeoutCount=parseInt(localStorage.getItem('vs15_to')||'0');
+  squads=lj('vs15_squads',[]);
+  activeSquadIdx=parseInt(localStorage.getItem('vs15_asq')||'-1');
   // Ricalcola sempre formation e currentLineup dalle tabelle aggiornate (mai dai valori salvati)
   if(roleAssign && Object.keys(roleAssign).length>=6){
     formation=buildFormation(window._startRot||0);
@@ -1079,6 +1196,7 @@ function save(){
   localStorage.setItem('vs15_c',JSON.stringify(convoked));
   localStorage.setItem('vs15_st',JSON.stringify(starters));
   localStorage.setItem('vs15_l',libero);
+  localStorage.setItem('vs15_l2',libero2);
   localStorage.setItem('vs15_ra',JSON.stringify(roleAssign));
   localStorage.setItem('vs15_sr',window._startRot||0);
   localStorage.setItem('vs15_lo',JSON.stringify(liberoOut));
@@ -1095,61 +1213,124 @@ function save(){
   localStorage.setItem('vs15_arch',JSON.stringify(archive));
   localStorage.setItem('vs15_myname',myTeamName);
   localStorage.setItem('vs15_oppname',oppTeamName);
+  localStorage.setItem('vs15_mdate',matchDate);
+  localStorage.setItem('vs15_mloc',matchLocation);
+  localStorage.setItem('vs15_mchamp',matchChampionship);
+  localStorage.setItem('vs15_to',timeoutCount);
+  localStorage.setItem('vs15_squads',JSON.stringify(squads));
+  localStorage.setItem('vs15_asq',activeSquadIdx);
 }
 function getP(n){return roster.find(function(p){return p.num===n;});}
 
 // ================================================================
-// TEAMS
+// SQUADS (multi-roster)
 // ================================================================
-function addTeam(){
-  var n=document.getElementById('team-in-name').value.trim();
+function addSquad(){
+  var n=document.getElementById('squad-in-name').value.trim();
   if(!n)return;
-  savedTeams.push(n);
-  document.getElementById('team-in-name').value='';
-  save();renderTeams();refreshOppSel();
+  if(squads.find(function(s){return s.name===n;})){alert('Squadra già presente');return;}
+  squads.push({name:n,roster:[]});
+  document.getElementById('squad-in-name').value='';
+  save();renderSquadList();refreshMySquadSel();
 }
-function removeTeam(i){savedTeams.splice(i,1);save();renderTeams();refreshOppSel();}
-function renderTeams(){
-  document.getElementById('teams-count').textContent=savedTeams.length;
-  document.getElementById('teams-list').innerHTML=savedTeams.map(function(n,i){
-    return '<div class="team-card"><div class="tc-name">'+n+'</div>'
-      +'<div class="tc-btns"><button class="tc-btn del" onclick="removeTeam('+i+')">Elimina</button></div></div>';
+function removeSquad(i){
+  if(!confirm('Eliminare la squadra "'+squads[i].name+'" e tutti i suoi giocatori?'))return;
+  if(activeSquadIdx===i){activeSquadIdx=-1;roster=[];}
+  else if(activeSquadIdx>i)activeSquadIdx--;
+  squads.splice(i,1);
+  save();renderSquadList();refreshMySquadSel();renderRoster();
+}
+function selectSquad(i){
+  activeSquadIdx=i;
+  roster=squads[i].roster;
+  // reset convocati/titolari se cambio squadra
+  convoked=[];starters=[];libero='';libero2='';roleAssign={};formation=null;currentLineup=null;
+  myTeamName=squads[i].name;
+  save();renderSquadList();refreshMySquadSel();renderRoster();renderConvGrid();renderStarterGrid();
+  updateScoreUI();updateTeamNames();
+  document.getElementById('current-team-label').textContent=squads[i].name;
+  // Mostra sezione aggiungi giocatore
+  document.getElementById('roster-section-lbl').style.display='';
+  document.getElementById('roster-add-row').style.display='';
+}
+function renderSquadList(){
+  var el=document.getElementById('squad-list');
+  if(!el)return;
+  if(!squads.length){
+    el.innerHTML='<div style="padding:16px;text-align:center;color:var(--muted);font-family:var(--fh);font-size:12px;text-transform:uppercase">Nessuna squadra. Aggiungine una!</div>';
+    return;
+  }
+  el.innerHTML=squads.map(function(sq,i){
+    var isActive=i===activeSquadIdx;
+    return '<div class="team-card">'
+      +'<div class="tc-name">'+sq.name+'</div>'
+      +'<div class="tc-count">'+sq.roster.length+' gioc.</div>'
+      +(isActive?'<span class="tc-active-badge">Attiva</span>':'')
+      +'<div class="tc-btns">'
+        +'<button class="tc-btn sel'+(isActive?' active-sel':'')+'" onclick="selectSquad('+i+')">'+(isActive?'✓ Selezionata':'Seleziona')+'</button>'
+        +'<button class="tc-btn del" onclick="removeSquad('+i+')">Elimina</button>'
+      +'</div></div>';
   }).join('');
 }
-function refreshOppSel(){
-  var sel=document.getElementById('opp-team-sel');
-  sel.innerHTML='<option value="">Seleziona avversario...</option>';
-  savedTeams.forEach(function(n){sel.innerHTML+='<option value="'+n+'">'+n+'</option>';});
-  if(oppTeamName&&savedTeams.indexOf(oppTeamName)>=0)sel.value=oppTeamName;
+function refreshMySquadSel(){
+  var sel=document.getElementById('my-squad-sel');
+  if(!sel)return;
+  sel.innerHTML='<option value="">Seleziona la tua squadra...</option>';
+  squads.forEach(function(sq,i){sel.innerHTML+='<option value="'+i+'">'+sq.name+'</option>';});
+  if(activeSquadIdx>=0)sel.value=activeSquadIdx;
 }
+function onMySquadChange(){
+  var sel=document.getElementById('my-squad-sel');
+  var idx=parseInt(sel.value);
+  if(isNaN(idx)||idx<0)return;
+  selectSquad(idx);
+  // Aggiorna la pagina setup
+  renderConvGrid();renderStarterGrid();
+}
+
+// Retrocompat: addTeam (non più usato nei nuovi team avversari ma usato da backup)
+function addTeam(){
+  var n=document.getElementById('squad-in-name')?document.getElementById('squad-in-name').value.trim():'';
+  if(!n)return;
+  savedTeams.push(n);
+  save();
+}
+function removeTeam(i){savedTeams.splice(i,1);save();}
+function renderTeams(){} // legacy noop
 
 // ================================================================
 // ROSTER
 // ================================================================
 function addToRoster(){
+  if(activeSquadIdx<0){alert('Seleziona prima una squadra!');return;}
   var num=document.getElementById('in-num').value.trim();
   var name=document.getElementById('in-name').value.trim();
   var role=document.getElementById('in-role').value;
   if(!num)return;
   if(roster.find(function(p){return p.num===num;})){alert('Numero già presente');return;}
-  roster.push({num:num,name:name||'#'+num,role:role});
+  var p={num:num,name:name||'#'+num,role:role};
+  roster.push(p);
+  squads[activeSquadIdx].roster=roster; // sincronizza
   if(!stats[num])stats[num]={};
   document.getElementById('in-num').value='';document.getElementById('in-name').value='';
-  save();renderRoster();renderConvGrid();
+  save();renderRoster();renderConvGrid();renderSquadList();
 }
 function removeFromRoster(num){
   roster=roster.filter(function(p){return p.num!==num;});
+  if(activeSquadIdx>=0)squads[activeSquadIdx].roster=roster;
   convoked=convoked.filter(function(n){return n!==num;});
   starters=starters.filter(function(n){return n!==num;});
   if(libero===num)libero='';
-  save();renderRoster();renderConvGrid();renderStarterGrid();
+  if(libero2===num)libero2='';
+  save();renderRoster();renderConvGrid();renderStarterGrid();renderSquadList();
 }
 function clearAll(){
-  roster=[];stats={};oppStats={};statsBySet={};oppStatsBySet={};convoked=[];starters=[];libero='';roleAssign={};
+  roster=[];stats={};oppStats={};statsBySet={};oppStatsBySet={};convoked=[];starters=[];libero='';libero2='';roleAssign={};
   formation=null;currentLineup=null;curRot=0;weServe=true;
-  scoreUs=0;scoreThem=0;setsUs=0;setsThem=0;setHistory=[];curSet=1;subLog=[];scoreHistory=[];
+  scoreUs=0;scoreThem=0;setsUs=0;setsThem=0;setHistory=[];curSet=1;subLog=[];scoreHistory=[];timeoutCount=0;
   selectedNum=null;selectedFund=null;lastStat=null;subMode=false;subOutNum=null;subInNum=null;
-  save();renderRoster();renderConvGrid();renderStarterGrid();updateScoreUI();renderCourt();renderStats();
+  if(activeSquadIdx>=0)squads[activeSquadIdx].roster=[];
+  save();renderRoster();renderConvGrid();renderStarterGrid();updateScoreUI();renderCourt();renderStats();renderSquadList();
 }
 function renderRoster(){
   document.getElementById('rc').textContent=roster.length;
@@ -1182,16 +1363,26 @@ function renderStarterGrid(){
     var p=getP(num);
     var isStart=starters.indexOf(num)>=0;
     var isLib=libero===num;
-    var cls='pgbtn'+(isLib?' on-lib':(isStart?' on':''));
+    var isLib2=libero2===num;
+    var cls='pgbtn'+(isLib||isLib2?' on-lib':(isStart?' on':''));
+    var roleLabel=(isLib?'LIBERO 1':(isLib2?'LIBERO 2':(p?p.role:'')));
     return '<div class="'+cls+'" onclick="toggleStarter(\''+num+'\')">'
       +'<div class="pgn">'+num+'</div><div class="pgnm">'+(p?p.name:'')+'</div>'
-      +'<div class="pgrl">'+(isLib?'LIBERO':(p?p.role:''))+'</div></div>';
+      +'<div class="pgrl">'+roleLabel+'</div></div>';
   }).join('');
   renderRoleRows();
 }
 function toggleStarter(num){
   var p=getP(num);
-  if(p&&p.role==='L'){libero=(libero===num?'':num);save();renderStarterGrid();return;}
+  if(p&&p.role==='L'){
+    // Supporto 2 liberi: il primo click → libero, secondo click → libero2, terzo click → deseleziona tutto
+    if(libero===num){libero='';save();renderStarterGrid();return;}
+    if(libero2===num){libero2='';save();renderStarterGrid();return;}
+    if(!libero){libero=num;}
+    else if(!libero2){libero2=num;}
+    else{libero=num;libero2='';} // terzo libero: sostituisce il primo
+    save();renderStarterGrid();return;
+  }
   if(starters.indexOf(num)>=0)starters=starters.filter(function(n){return n!==num;});
   else{if(starters.length>=6){alert('Max 6 in campo');return;}starters.push(num);}
   save();renderStarterGrid();
@@ -1366,10 +1557,23 @@ function applyLiberoSwap(rot){
 
 function startMatch(){
   if(starters.length!==6){alert('Seleziona 6 titolari');return;}
-  var mn=document.getElementById('my-team-name').value.trim();
-  var os=document.getElementById('opp-team-sel').value;
-  if(mn)myTeamName=mn;
-  if(os)oppTeamName=os;
+  // Prende i dati dalla nuova pagina setup
+  var sqSel=document.getElementById('my-squad-sel');
+  if(sqSel&&sqSel.value!==''){
+    var sqIdx=parseInt(sqSel.value);
+    if(!isNaN(sqIdx)&&squads[sqIdx]){myTeamName=squads[sqIdx].name;activeSquadIdx=sqIdx;}
+  }
+  var oppInput=document.getElementById('opp-team-input');
+  if(oppInput&&oppInput.value.trim())oppTeamName=oppInput.value.trim();
+  var champEl=document.getElementById('match-championship');
+  if(champEl)matchChampionship=champEl.value.trim();
+  var dateEl=document.getElementById('match-date');
+  if(dateEl)matchDate=dateEl.value;
+  var locEl=document.getElementById('match-location');
+  if(locEl)matchLocation=locEl.value.trim();
+  // Legacy compat
+  var mn=document.getElementById('my-team-name');
+  if(mn&&mn.value.trim()&&!myTeamName)myTeamName=mn.value.trim();
   var used={};var ok=true;
   SLOT_KEYS.forEach(function(k){
     var s=document.getElementById('ra-'+k);var v=s?s.value:'';
@@ -1378,7 +1582,7 @@ function startMatch(){
   if(!ok){alert('Assegna un giocatore a ogni posizione');return;}
   var startRot=parseInt(document.getElementById('p1-sel').value)||0;
   window._startRot=startRot;
-  curRot=0;scoreUs=0;scoreThem=0;subLog=[];scoreHistory=[];liberoOut=false;
+  curRot=0;scoreUs=0;scoreThem=0;subLog=[];scoreHistory=[];liberoOut=false;timeoutCount=0;
   // weServe verrà impostato dall'utente nella modale
   formation=buildFormation(startRot);
   applyLiberoSwap(0);
@@ -1480,6 +1684,7 @@ function highlightFund(){
 
 // doEffect: registers stat AND handles score/rotation
 function doEffect(eff){
+  if(eff==='errore_gen')eff='errore'; // alias visivo, stessa logica
   if(!selectedNum||!selectedFund){
     alert(!selectedNum?'Tocca un giocatore sul campo':'Seleziona un fondamentale');return;
   }
@@ -1513,7 +1718,6 @@ function doEffect(eff){
     scoreThem++;
     if(weServe){
       weServe=false;
-      // Perdiamo il servizio: se il Libero era fuori, rientra
       if(liberoOut){liberoOut=false;currentLineup=gameLineupForRot(curRot);}
     }
     save();updateScoreUI();renderCourt();checkSetEnd();
@@ -1573,6 +1777,99 @@ function oppAction(key,isOurPoint){
 }
 
 // ================================================================
+// TIME OUT
+// ================================================================
+function callTimeout(){
+  if(timeoutCount>=2){
+    // Già 2 time out usati: chiede se resettare
+    if(confirm('Hai già usato 2 time out. Resettare per questo set?')){
+      timeoutCount=0;
+      updateTimeoutUI();
+      save();
+    }
+    return;
+  }
+  timeoutCount++;
+  updateTimeoutUI();
+  save();
+}
+function updateTimeoutUI(){
+  var btn1=document.getElementById('to-btn-1');
+  var btn2=document.getElementById('to-btn-2');
+  if(!btn1||!btn2)return;
+  // Reset
+  btn1.className='to-btn';btn1.style.opacity='';
+  btn2.className='to-btn';btn2.style.opacity='';
+  if(timeoutCount>=1){
+    btn1.className='to-btn used1';
+  }
+  if(timeoutCount>=2){
+    btn1.className='to-btn used2';
+    btn2.className='to-btn used2';btn2.style.opacity='';
+  } else {
+    btn2.style.opacity=timeoutCount===0?'.4':'1';
+  }
+}
+
+// ================================================================
+// LIBERO MODAL (sostituzione libero durante gara)
+// ================================================================
+function openLiberoModal(){
+  if(!libero&&!libero2){alert('Nessun libero convocato!');return;}
+  var html='';
+  // Mostra i liberi disponibili
+  var libs=[libero,libero2].filter(Boolean);
+  // Aggiungi anche: libero come giocatore normale (se il libero è stato convocato con ruolo diverso)
+  // Plus: chi è il Centrale attivo in campo (da poter sostituire con libero)
+  var activeCentrales=[];
+  if(currentLineup){
+    currentLineup.forEach(function(num){
+      var p=getP(num);if(p&&p.role==='C')activeCentrales.push(num);
+    });
+  }
+  html+='<div style="font-size:12px;color:var(--muted);font-family:var(--fh);margin-bottom:8px">Libero/i convocati:</div>';
+  libs.forEach(function(lnum){
+    var p=getP(lnum);
+    var isActive=currentLineup&&currentLineup.indexOf(lnum)>=0;
+    html+='<div class="lib-swap-row" onclick="activateLibero(\''+lnum+'\')">'
+      +'<div class="lib-tok">'+lnum+'</div>'
+      +'<div class="lib-info"><div class="lib-name">#'+lnum+' '+(p?p.name:'')+'</div>'
+      +'<div class="lib-status">'+(isActive?'✅ In campo':'⬆ In panchina')+'</div></div>'
+      +(isActive?'<div class="lib-active-dot"></div>':'')
+      +'</div>';
+  });
+  if(activeCentrales.length){
+    html+='<div style="font-size:12px;color:var(--muted);font-family:var(--fh);margin-top:10px;margin-bottom:6px">Centrali in campo (sostituibili dal libero):</div>';
+    activeCentrales.forEach(function(cnum){
+      var p=getP(cnum);
+      html+='<div style="padding:6px 10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;margin-bottom:5px;font-family:var(--fh);font-size:13px;color:#fff">'
+        +'#'+cnum+' '+(p?p.name:'')+'</div>';
+    });
+  }
+  document.getElementById('libero-options').innerHTML=html;
+  document.getElementById('libero-modal').classList.remove('h');
+}
+function activateLibero(lnum){
+  // Forza il libero attivo come `libero` (primo libero)
+  if(libero===lnum){
+    // Era già il libero1: diventa libero2 se c'è, altrimenti toggle
+    if(libero2){var tmp=libero;libero=libero2;libero2=tmp;}
+  } else if(libero2===lnum){
+    // Era libero2: scambia
+    var tmp2=libero;libero=libero2;libero2=tmp2;
+  } else {
+    // Non era libero: lo imposta come libero1
+    libero2=libero;libero=lnum;
+  }
+  liberoOut=false;
+  currentLineup=gameLineupForRot(curRot);
+  save();renderCourt();closeLiberoModal();
+}
+function closeLiberoModal(){
+  document.getElementById('libero-modal').classList.add('h');
+}
+
+// ================================================================
 // SUBSTITUTION
 // ================================================================
 function toggleSub(){
@@ -1610,12 +1907,31 @@ function renderSubModal(){
     outEl.innerHTML='<div class="sub-st out">⬆ Esce: #'+subOutNum+' '+(pO?pO.name:'')+'</div>';
     inEl.innerHTML='';
     var onSet=new Set(currentLineup||[]);
-    var bench=convoked.filter(function(n){return !onSet.has(n);});
-    gridEl.innerHTML=bench.length?bench.map(function(n){var p=getP(n);
-      return '<div class="spgbtn" onclick="selectSubIn(\''+n+'\')">'
-        +'<div class="spn" style="color:#27ae60">'+n+'</div>'
-        +'<div class="spnm">'+(p?p.name:'')+'</div></div>';
-    }).join(''):'<div style="color:var(--muted);font-size:11px;font-family:var(--fh);text-transform:uppercase">Nessuno in panchina</div>';
+    // Separare liberi e giocatori normali in panchina
+    var benchAll=convoked.filter(function(n){return !onSet.has(n);});
+    var liberoNums=[libero,libero2].filter(Boolean);
+    var benchNorm=benchAll.filter(function(n){return liberoNums.indexOf(n)<0;});
+    var benchLibs=benchAll.filter(function(n){return liberoNums.indexOf(n)>=0;});
+    // Liberi disponibili (anche quelli in campo ma come sostituzione libero)
+    var allLibs=liberoNums;
+    var libsNotOut=allLibs.filter(function(n){return !onSet.has(n);});
+    var html='';
+    if(benchNorm.length){
+      html+=benchNorm.map(function(n){var p=getP(n);
+        return '<div class="spgbtn" onclick="selectSubIn(\''+n+'\')">'
+          +'<div class="spn" style="color:#27ae60">'+n+'</div>'
+          +'<div class="spnm">'+(p?p.name:'')+'</div></div>';
+      }).join('');
+    }
+    if(libsNotOut.length){
+      html+='<div style="width:100%;font-size:10px;color:var(--muted);font-family:var(--fh);text-transform:uppercase;letter-spacing:.05em;padding:4px 2px;margin-top:4px">Libero</div>';
+      html+=libsNotOut.map(function(n){var p=getP(n);
+        return '<div class="spgbtn" onclick="selectSubIn(\''+n+'\')" style="border-color:rgba(168,85,247,.4)">'
+          +'<div class="spn" style="color:#d8a4f8">'+n+'</div>'
+          +'<div class="spnm">'+(p?p.name:'')+'</div></div>';
+      }).join('');
+    }
+    gridEl.innerHTML=html||'<div style="color:var(--muted);font-size:11px;font-family:var(--fh);text-transform:uppercase">Nessuno in panchina</div>';
     conf.disabled=true;
   } else {
     var pO2=getP(subOutNum),pI=getP(subInNum);
@@ -1629,17 +1945,33 @@ function selectSubOut(n){subOutNum=n;subInNum=null;renderSubModal();renderCourt(
 function selectSubIn(n){subInNum=n;renderSubModal();}
 function confirmSub(){
   if(!subOutNum||!subInNum)return;
-  // Aggiorna roleAssign (mantiene la logica di rotazione corretta)
-  Object.keys(roleAssign).forEach(function(k){
-    if(roleAssign[k]===subOutNum)roleAssign[k]=subInNum;
-  });
-  // Aggiorna currentLineup (posizioni di gioco)
-  var idx=currentLineup.indexOf(subOutNum);
-  if(idx!==-1)currentLineup[idx]=subInNum;
-  // Ricostruisce formation con il nuovo roleAssign -> aggiorna il battitore
-  formation=buildFormation(window._startRot||0);
+  var liberoNums=[libero,libero2].filter(Boolean);
+  var inIsLibero=liberoNums.indexOf(subInNum)>=0;
+  var outIsLibero=liberoNums.indexOf(subOutNum)>=0;
+  if(inIsLibero){
+    // Sostituzione con un libero: aggiorna il libero attivo
+    // Il libero entra al posto di chi esce (che era un giocatore di campo)
+    if(libero===subInNum){
+      // già libero1, nessuna modifica ai liberi necessaria
+    } else if(libero2===subInNum){
+      // diventa libero1
+      var tmp=libero;libero=libero2;libero2=tmp;
+    }
+    liberoOut=false;
+    // Aggiorna currentLineup direttamente
+    var idx2=currentLineup.indexOf(subOutNum);
+    if(idx2!==-1)currentLineup[idx2]=subInNum;
+  } else {
+    // Sostituzione normale
+    Object.keys(roleAssign).forEach(function(k){
+      if(roleAssign[k]===subOutNum)roleAssign[k]=subInNum;
+    });
+    var idx=currentLineup.indexOf(subOutNum);
+    if(idx!==-1)currentLineup[idx]=subInNum;
+    formation=buildFormation(window._startRot||0);
+  }
   var pO=getP(subOutNum),pI=getP(subInNum);
-  subLog.push({set:curSet,score:scoreUs+'-'+scoreThem,outNum:subOutNum,outName:pO?pO.name:'',inNum:subInNum,inName:pI?pI.name:''});
+  subLog.push({set:curSet,score:scoreUs+'-'+scoreThem,outNum:subOutNum,outName:pO?pO.name:'',inNum:subInNum,inName:pI?pI.name:'',libero:inIsLibero});
   save();cancelSub();renderCourt();renderStats();
 }
 
@@ -1823,9 +2155,11 @@ function archiveCurrentMatch(silent){
   // Snapshot della gara
   var entry={
     id:Date.now(),
-    date:new Date().toISOString(),
+    date:matchDate||new Date().toISOString().slice(0,10),
     myTeam:myTeamName,
     oppTeam:oppTeamName,
+    championship:matchChampionship,
+    location:matchLocation,
     setsUs:setsUs,
     setsThem:setsThem,
     setHistory:JSON.parse(JSON.stringify(setHistory)),
@@ -1889,7 +2223,10 @@ function renderArchive(){
         +'<div class="arch-card-result '+(won?'win':'loss')+'">'+e.setsUs+'–'+e.setsThem+'</div>'
         +'<div class="arch-card-actions"><button class="arch-del-btn" onclick="deleteArchiveEntry('+e.id+', event)">Elimina</button></div>'
       +'</div>'
-      +'<div class="arch-card-meta"><span>'+dateStr+'</span></div>'
+      +'<div class="arch-card-meta"><span>'+dateStr+'</span>'
+        +(e.championship?'<span> · '+e.championship+'</span>':'')
+        +(e.location?'<span> · '+e.location+'</span>':'')
+      +'</div>'
       +(sets?'<div class="arch-card-sets">'+sets+'</div>':'')
       +'</div>';
   }).join('');
@@ -2448,14 +2785,22 @@ function goPage(name){
   document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('active');});
   document.getElementById('page-'+name).classList.add('active');
   document.getElementById('nb-'+name).classList.add('active');
-  if(name==='match'){renderCourt();renderSelBadge();highlightFund();updateTeamNames();}
+  if(name==='match'){renderCourt();renderSelBadge();highlightFund();updateTeamNames();updateTimeoutUI();}
   if(name==='stats')renderStats();
   if(name==='setup'){
-    renderConvGrid();renderStarterGrid();refreshOppSel();
-    var mn=document.getElementById('my-team-name');if(mn)mn.value=myTeamName;
+    renderConvGrid();renderStarterGrid();refreshMySquadSel();
+    // Imposta i campi della gara
+    var oppInput=document.getElementById('opp-team-input');if(oppInput)oppInput.value=oppTeamName!=='Avversari'?oppTeamName:'';
+    var champEl=document.getElementById('match-championship');if(champEl)champEl.value=matchChampionship;
+    var dateEl=document.getElementById('match-date');if(dateEl)dateEl.value=matchDate;
+    var locEl=document.getElementById('match-location');if(locEl)locEl.value=matchLocation;
   }
-  if(name==='teams')renderTeams();
-  if(name==='roster')renderRoster();
+  if(name==='roster'){renderSquadList();renderRoster();
+    var lbl=document.getElementById('current-team-label');
+    if(lbl)lbl.textContent=activeSquadIdx>=0?squads[activeSquadIdx].name:'–';
+    var sec=document.getElementById('roster-section-lbl');if(sec)sec.style.display=activeSquadIdx>=0?'':'none';
+    var arow=document.getElementById('roster-add-row');if(arow)arow.style.display=activeSquadIdx>=0?'':'none';
+  }
   if(name==='archive')renderArchive();
 }
 
@@ -2464,17 +2809,22 @@ function goPage(name){
 // ================================================================
 function exportBackup(){
   var data={
-    version:2,
+    version:3,
     date:new Date().toISOString(),
+    squads:squads,
+    activeSquadIdx:activeSquadIdx,
     roster:roster,
-    savedTeams:savedTeams,
     archive:archive,
     // Gara in corso
     myTeamName:myTeamName,
     oppTeamName:oppTeamName,
+    matchDate:matchDate,
+    matchLocation:matchLocation,
+    matchChampionship:matchChampionship,
     convoked:convoked,
     starters:starters,
     libero:libero,
+    libero2:libero2,
     roleAssign:roleAssign,
     curRot:curRot,
     startRot:window._startRot||0,
@@ -2489,7 +2839,8 @@ function exportBackup(){
     stats:stats,
     oppStats:oppStats,
     statsBySet:statsBySet,
-    oppStatsBySet:oppStatsBySet
+    oppStatsBySet:oppStatsBySet,
+    timeoutCount:timeoutCount
   };
   var json=JSON.stringify(data,null,2);
   var blob=new Blob([json],{type:'application/json'});
@@ -2513,18 +2864,23 @@ function importBackup(ev){
   reader.onload=function(e){
     try{
       var data=JSON.parse(e.target.result);
-      if(!data.version||!data.roster){
+      if(!data.version||(!data.roster&&!data.squads)){
         alert('File non valido o corrotto.');return;
       }
       // Ripristina tutti i dati
-      roster=data.roster||[];
-      savedTeams=data.savedTeams||[];
+      squads=data.squads||[];
+      activeSquadIdx=data.activeSquadIdx!=null?data.activeSquadIdx:-1;
+      roster=data.roster||(activeSquadIdx>=0&&squads[activeSquadIdx]?squads[activeSquadIdx].roster:[]);
       archive=data.archive||[];
       myTeamName=data.myTeamName||'Noi';
       oppTeamName=data.oppTeamName||'Avversari';
+      matchDate=data.matchDate||'';
+      matchLocation=data.matchLocation||'';
+      matchChampionship=data.matchChampionship||'';
       convoked=data.convoked||[];
       starters=data.starters||[];
       libero=data.libero||'';
+      libero2=data.libero2||'';
       roleAssign=data.roleAssign||{};
       curRot=data.curRot||0;
       window._startRot=data.startRot||0;
@@ -2540,6 +2896,7 @@ function importBackup(ev){
       oppStats=data.oppStats||{};
       statsBySet=data.statsBySet||{};
       oppStatsBySet=data.oppStatsBySet||{};
+      timeoutCount=data.timeoutCount||0;
       // Ricalcola formation e lineup
       if(roleAssign&&Object.keys(roleAssign).length>=6){
         formation=buildFormation(window._startRot);
@@ -2547,10 +2904,10 @@ function importBackup(ev){
       }
       save();
       updateScoreUI();updateTeamNames();
+      renderSquadList();refreshMySquadSel();
       renderRoster();renderConvGrid();renderStarterGrid();
-      renderTeams();refreshOppSel();
       renderCourt();renderStats();renderArchive();
-      alert('Backup importato con successo!\n\nRoster: '+roster.length+' giocatori\nArchivio: '+archive.length+' gare');
+      alert('Backup importato con successo!\n\nSquadre: '+squads.length+'\nArchivio: '+archive.length+' gare');
     }catch(err){
       alert('Errore durante l\'importazione:\n'+err.message);
     }
@@ -2566,27 +2923,28 @@ function clearAllData(){
   // Cancella tutto il localStorage con le nostre chiavi
   Object.keys(localStorage).filter(function(k){return k.startsWith('vs15_');}).forEach(function(k){localStorage.removeItem(k);});
   // Reimposta variabili
+  squads=[];activeSquadIdx=-1;
   roster=[];stats={};oppStats={};statsBySet={};oppStatsBySet={};
-  convoked=[];starters=[];libero='';roleAssign={};
-  savedTeams=[];archive=[];
+  convoked=[];starters=[];libero='';libero2='';roleAssign={};
+  archive=[];
   myTeamName='Noi';oppTeamName='Avversari';
+  matchDate='';matchLocation='';matchChampionship='';
   curRot=0;window._startRot=0;weServe=true;
   scoreUs=0;scoreThem=0;setsUs=0;setsThem=0;curSet=1;
-  setHistory=[];subLog=[];scoreHistory=[];
+  setHistory=[];subLog=[];scoreHistory=[];timeoutCount=0;
   formation=null;currentLineup=null;lastStat=null;
   updateScoreUI();updateTeamNames();
+  renderSquadList();refreshMySquadSel();
   renderRoster();renderConvGrid();renderStarterGrid();
-  renderTeams();refreshOppSel();
   renderCourt();renderStats();renderArchive();
   alert('Tutti i dati sono stati cancellati.');
 }
 // INIT
 document.getElementById('in-name').addEventListener('keydown',function(e){if(e.key==='Enter')addToRoster();});
-document.getElementById('team-in-name').addEventListener('keydown',function(e){if(e.key==='Enter')addTeam();});
 loadState();
-// Se non c'è nessuna gara configurata, inietta dati demo per l'anteprima
-if(!currentLineup && roster.length===0){
-  roster=[
+// Se non c'è nessuna gara configurata, inietta dati demo
+if(!currentLineup && squads.length===0){
+  var demoSquad={name:'La Mia Squadra',roster:[
     {num:'1',name:'Rossi',role:'P'},
     {num:'4',name:'Bianchi',role:'S'},
     {num:'7',name:'Verdi',role:'S'},
@@ -2594,20 +2952,24 @@ if(!currentLineup && roster.length===0){
     {num:'11',name:'Esposito',role:'C'},
     {num:'3',name:'Conti',role:'O'},
     {num:'13',name:'Ricci',role:'L'}
-  ];
+  ]};
+  squads=[demoSquad];
+  activeSquadIdx=0;
+  roster=demoSquad.roster;
   roster.forEach(function(p){if(!stats[p.num])stats[p.num]={};});
   roleAssign={P:'1',S1:'4',S2:'7',C1:'9',C2:'11',O:'3'};
   libero='13';
   window._startRot=0;
   formation=buildFormation(0);
   currentLineup=gameLineupForRot(0);
-  myTeamName='La Mia Squadra';
+  myTeamName=demoSquad.name;
   oppTeamName='Avversari';
 }
 updateScoreUI();updateTeamNames();
+renderSquadList();refreshMySquadSel();
 renderRoster();renderConvGrid();renderStarterGrid();
-renderTeams();refreshOppSel();
 renderCourt();renderStats();renderArchive();
+goPage('home');
 </script>
 </body>
 </html>
