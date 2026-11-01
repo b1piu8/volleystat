@@ -260,8 +260,9 @@ html,body{background:var(--green);color:var(--text);font-family:var(--fb);height
 .gp-num{font-family:var(--fh);font-size:18px;font-weight:900;color:var(--acc);min-width:28px;text-align:center;}
 .gp-info{flex:1;font-family:var(--fh);font-size:13px;color:#fff;}
 .gp-role{font-size:11px;color:var(--muted);}
-.gp-add-btn{background:rgba(39,174,96,.2);border:1px solid rgba(39,174,96,.4);color:#27ae60;font-family:var(--fh);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;cursor:pointer;text-transform:uppercase;}
-.gp-add-btn:disabled{opacity:.3;cursor:default;}
+.gp-add-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:#ffffff;font-family:var(--fh);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;cursor:pointer;text-transform:uppercase;}
+.gp-add-btn:hover{background:rgba(255,255,255,.22);}
+.gp-add-btn.in-rosa{background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.4);color:var(--acc);cursor:default;}
 .gp-del{background:none;border:none;color:rgba(255,255,255,.3);font-size:16px;cursor:pointer;padding:0 4px;}
 .gp-del:hover{color:#e74c3c;}
 
@@ -1381,7 +1382,7 @@ function removeGlobalPlayer(id){
 function addFromGlobalToRoster(idx){
   if(activeSquadIdx<0){alert('Seleziona prima una squadra!');return;}
   var gp=globalPlayers[idx];if(!gp)return;
-  if(roster.find(function(p){return p.num===gp.num;})){alert('Numero '+gp.num+' già presente nella rosa');return;}
+  if(roster.find(function(p){return p.num===gp.num;})){return;} // già in rosa, ignora silenziosamente
   var p={num:gp.num,name:gp.name,role:gp.role};
   roster.push(p);
   squads[activeSquadIdx].roster=roster;
@@ -1395,11 +1396,11 @@ function renderGlobalPlayers(){
     html='<div style="color:var(--muted);font-size:12px;padding:6px 2px">Nessun giocatore in anagrafica</div>';
   } else {
     globalPlayers.forEach(function(gp,idx){
-      var inRoster=activeSquadIdx>=0&&roster.find(function(p){return p.num===gp.num;});
+      var inRoster=activeSquadIdx>=0&&!!roster.find(function(p){return p.num===gp.num;});
       html+='<div class="gp-card">'
         +'<div class="gp-num'+(gp.role==='L'?' lib':'')+'">'+gp.num+'</div>'
         +'<div class="gp-info">'+gp.name+'<div class="gp-role">'+(RL[gp.role]||'–')+'</div></div>'
-        +(activeSquadIdx>=0?'<button class="gp-add-btn" onclick="addFromGlobalToRoster('+idx+')"'+(inRoster?' disabled':'')+'>'+(inRoster?'✓ In rosa':'+ Aggiungi')+'</button>':'')
+        +(activeSquadIdx>=0?'<button class="gp-add-btn'+(inRoster?' in-rosa':'')+'" onclick="addFromGlobalToRoster('+idx+')">'+(inRoster?'✓ In rosa':'+ Aggiungi')+'</button>':'')
         +'<button class="gp-del" onclick="removeGlobalPlayer('+gp.id+')">×</button>'
         +'</div>';
     });
@@ -2840,6 +2841,59 @@ function exportStatsPDF(){
     });
     y+=rowH;
   });
+
+  // Riga TOTALE
+  if(sorted.length>0){
+    if(y+rowH>pageH-margin){doc.addPage();y=margin;}
+    // Calcola totali
+    var totByFund={};
+    FUNDS_ORDER.forEach(function(f){totByFund[f]={pt:0,pos:0,neg:0,err:0};});
+    sorted.forEach(function(num){
+      FUNDS_ORDER.forEach(function(f){
+        var ag=aggregateEffects(srcStats[num]&&srcStats[num][f],f);
+        totByFund[f].pt+=ag.pt;totByFund[f].pos+=ag.pos;totByFund[f].neg+=ag.neg;totByFund[f].err+=ag.err;
+      });
+    });
+    // Sfondo riga totale
+    doc.setFillColor(50,35,5);
+    doc.rect(margin,y,pageW-margin*2,rowH,'F');
+    doc.setDrawColor(245,166,35);
+    doc.setLineWidth(0.5);
+    doc.rect(margin,y,pageW-margin*2,rowH);
+    doc.setLineWidth(0.1);
+    // Etichetta TOTALE
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.setTextColor(245,166,35);
+    doc.text('TOTALE',margin+2,y+rowH/2+1);
+    // Celle totali per fondamentale
+    var colors=[[39,174,96],[52,152,219],[155,89,182],[231,76,60]];
+    FUNDS_ORDER.forEach(function(f,i){
+      var t=totByFund[f];
+      var vals=[t.pt,t.pos,t.neg,t.err];
+      vals.forEach(function(v,j){
+        var x=margin+nameColW+i*fundColW+j*effColW;
+        doc.setDrawColor(100,70,10);
+        doc.rect(x,y,effColW,rowH);
+        if(j===0){
+          doc.setDrawColor(245,166,35);
+          doc.setLineWidth(0.4);
+          doc.line(x,y,x,y+rowH);
+          doc.setLineWidth(0.1);
+        }
+        if(v>0){
+          doc.setFont('helvetica','bold');
+          doc.setTextColor(colors[j][0],colors[j][1],colors[j][2]);
+          doc.text(String(v),x+effColW/2,y+rowH/2+1,{align:'center'});
+        } else {
+          doc.setFont('helvetica','normal');
+          doc.setTextColor(100,80,30);
+          doc.text('-',x+effColW/2,y+rowH/2+1,{align:'center'});
+        }
+      });
+    });
+    y+=rowH;
+  }
 
   // Avversari
   var ok=Object.keys(srcOpp);
