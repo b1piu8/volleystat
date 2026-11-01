@@ -256,6 +256,14 @@ html,body{background:var(--green);color:var(--text);font-family:var(--fb);height
 .tc-active-badge{font-family:var(--fh);font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);color:var(--acc);white-space:nowrap;}
 .current-team-banner{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-family:var(--fh);font-size:13px;color:var(--acc);text-transform:uppercase;letter-spacing:.5px;}
 .current-team-banner b{color:#fff;}
+.gp-card{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;margin-bottom:5px;}
+.gp-num{font-family:var(--fh);font-size:18px;font-weight:900;color:var(--acc);min-width:28px;text-align:center;}
+.gp-info{flex:1;font-family:var(--fh);font-size:13px;color:#fff;}
+.gp-role{font-size:11px;color:var(--muted);}
+.gp-add-btn{background:rgba(39,174,96,.2);border:1px solid rgba(39,174,96,.4);color:#27ae60;font-family:var(--fh);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;cursor:pointer;text-transform:uppercase;}
+.gp-add-btn:disabled{opacity:.3;cursor:default;}
+.gp-del{background:none;border:none;color:rgba(255,255,255,.3);font-size:16px;cursor:pointer;padding:0 4px;}
+.gp-del:hover{color:#e74c3c;}
 
 /* Libero swap modal */
 .lib-swap-row{display:flex;align-items:center;gap:8px;padding:8px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);border-radius:8px;margin-bottom:6px;cursor:pointer;}
@@ -914,17 +922,12 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
       <span>📋</span>
       <span>Squadra: <b id="current-team-label">–</b></span>
     </div>
-    <div class="sec-lbl">Gestisci squadre</div>
+    <!-- ANAGRAFICA GLOBALE -->
+    <div class="sec-lbl">📋 Anagrafica giocatori</div>
     <div class="irow">
-      <input class="ifield" id="squad-in-name" type="text" placeholder="Nome squadra (es. Under16)">
-      <button class="abtn" onclick="addSquad()">+</button>
-    </div>
-    <div id="squad-list"></div>
-    <div class="sec-lbl" id="roster-section-lbl" style="display:none">Rosa: <span id="rc">0</span> giocatori</div>
-    <div class="irow" id="roster-add-row" style="display:none">
-      <input class="ifield w60" id="in-num" type="number" placeholder="##" min="1" max="99">
-      <input class="ifield" id="in-name" type="text" placeholder="Nome">
-      <select class="ifield w110" id="in-role">
+      <input class="ifield w60" id="gp-num" type="number" placeholder="##" min="1" max="99">
+      <input class="ifield" id="gp-name" type="text" placeholder="Nome giocatore">
+      <select class="ifield w110" id="gp-role">
         <option value="">Ruolo</option>
         <option value="P">Palleggiatore</option>
         <option value="S">Schiacciatore</option>
@@ -932,8 +935,18 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         <option value="O">Opposto</option>
         <option value="L">Libero</option>
       </select>
-      <button class="abtn" onclick="addToRoster()">+</button>
+      <button class="abtn" onclick="addGlobalPlayer()">+</button>
     </div>
+    <div id="gp-list"></div>
+
+    <!-- SQUADRE -->
+    <div class="sec-lbl" style="margin-top:14px">🏐 Gestisci squadre</div>
+    <div class="irow">
+      <input class="ifield" id="squad-in-name" type="text" placeholder="Nome squadra (es. Under16)">
+      <button class="abtn" onclick="addSquad()">+</button>
+    </div>
+    <div id="squad-list"></div>
+    <div class="sec-lbl" id="roster-section-lbl" style="display:none">Rosa: <span id="rc">0</span> giocatori</div>
     <div id="roster-list"></div>
   </div>
 </div>
@@ -949,7 +962,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     </div>
     <div class="sec-lbl">Avversario</div>
     <div class="irow">
-      <input class="ifield" id="opp-team-input" type="text" placeholder="Nome squadra avversaria" style="flex:1">
+      <input class="ifield" id="opp-team-input" type="text" placeholder="Nome squadra avversaria" style="flex:1" oninput="oppTeamName=this.value.trim()||'Avversari';save();updateTeamNames();">
     </div>
     <div class="sec-lbl">Campionato</div>
     <div class="irow">
@@ -1131,6 +1144,7 @@ var timeoutCount=0; // 0,1,2
 var myTeamName='Noi',oppTeamName='Avversari';
 var matchDate='',matchLocation='',matchChampionship='';
 var savedTeams=[],archive=[];
+var globalPlayers=[]; // anagrafica globale giocatori
 // Multi-roster: squads = [{name, roster:[]}]
 var squads=[]; // squadre con propri roster
 var activeSquadIdx=-1; // indice squadra selezionata (-1=nessuna)
@@ -1178,6 +1192,7 @@ function loadState(){
   timeoutCount=parseInt(localStorage.getItem('vs15_to')||'0');
   squads=lj('vs15_squads',[]);
   activeSquadIdx=parseInt(localStorage.getItem('vs15_asq')||'-1');
+  globalPlayers=lj('vs15_gp',[]);
   // Ricalcola sempre formation e currentLineup dalle tabelle aggiornate (mai dai valori salvati)
   if(roleAssign && Object.keys(roleAssign).length>=6){
     formation=buildFormation(window._startRot||0);
@@ -1219,6 +1234,7 @@ function save(){
   localStorage.setItem('vs15_to',timeoutCount);
   localStorage.setItem('vs15_squads',JSON.stringify(squads));
   localStorage.setItem('vs15_asq',activeSquadIdx);
+  localStorage.setItem('vs15_gp',JSON.stringify(globalPlayers));
 }
 function getP(n){return roster.find(function(p){return p.num===n;});}
 
@@ -1341,6 +1357,54 @@ function renderRoster(){
       +'<div><div class="cname">'+p.name+'</div><div class="crole">'+(RL[p.role]||'–')+'</div></div>'
       +'</div><button class="cdel" onclick="removeFromRoster(\''+p.num+'\')">×</button></div>';
   }).join('');
+}
+
+// ================================================================
+// ANAGRAFICA GLOBALE
+// ================================================================
+function addGlobalPlayer(){
+  var num=document.getElementById('gp-num').value.trim();
+  var name=document.getElementById('gp-name').value.trim();
+  var role=document.getElementById('gp-role').value;
+  if(!num||!name){alert('Inserisci numero e nome');return;}
+  var id=Date.now();
+  globalPlayers.push({id:id,num:num,name:name,role:role});
+  document.getElementById('gp-num').value='';
+  document.getElementById('gp-name').value='';
+  document.getElementById('gp-role').value='';
+  save();renderGlobalPlayers();
+}
+function removeGlobalPlayer(id){
+  globalPlayers=globalPlayers.filter(function(p){return p.id!==id;});
+  save();renderGlobalPlayers();
+}
+function addFromGlobalToRoster(idx){
+  if(activeSquadIdx<0){alert('Seleziona prima una squadra!');return;}
+  var gp=globalPlayers[idx];if(!gp)return;
+  if(roster.find(function(p){return p.num===gp.num;})){alert('Numero '+gp.num+' già presente nella rosa');return;}
+  var p={num:gp.num,name:gp.name,role:gp.role};
+  roster.push(p);
+  squads[activeSquadIdx].roster=roster;
+  if(!stats[gp.num])stats[gp.num]={};
+  save();renderRoster();renderConvGrid();renderSquadList();renderGlobalPlayers();
+}
+function renderGlobalPlayers(){
+  var RL={P:'Palleggiatore',S:'Schiacciatore',C:'Centrale',O:'Opposto',L:'Libero','':"–"};
+  var html='';
+  if(globalPlayers.length===0){
+    html='<div style="color:var(--muted);font-size:12px;padding:6px 2px">Nessun giocatore in anagrafica</div>';
+  } else {
+    globalPlayers.forEach(function(gp,idx){
+      var inRoster=activeSquadIdx>=0&&roster.find(function(p){return p.num===gp.num;});
+      html+='<div class="gp-card">'
+        +'<div class="gp-num'+(gp.role==='L'?' lib':'')+'">'+gp.num+'</div>'
+        +'<div class="gp-info">'+gp.name+'<div class="gp-role">'+(RL[gp.role]||'–')+'</div></div>'
+        +(activeSquadIdx>=0?'<button class="gp-add-btn" onclick="addFromGlobalToRoster('+idx+')"'+(inRoster?' disabled':'')+'>'+(inRoster?'✓ In rosa':'+ Aggiungi')+'</button>':'')
+        +'<button class="gp-del" onclick="removeGlobalPlayer('+gp.id+')">×</button>'
+        +'</div>';
+    });
+  }
+  document.getElementById('gp-list').innerHTML=html;
 }
 
 // ================================================================
@@ -2563,7 +2627,32 @@ function renderStats(){
     });
     html+='</tr>';
   });
-  html+='</tbody></table></div>';
+
+  // Riga TOTALE
+  var totals={pt:0,pos:0,neg:0,err:0};
+  var totalsByFund={};
+  FUNDS_ORDER.forEach(function(f){totalsByFund[f]={pt:0,pos:0,neg:0,err:0};});
+  sorted.forEach(function(num){
+    FUNDS_ORDER.forEach(function(f){
+      var ag=aggregateEffects(srcStats[num]&&srcStats[num][f],f);
+      totalsByFund[f].pt+=ag.pt;totalsByFund[f].pos+=ag.pos;totalsByFund[f].neg+=ag.neg;totalsByFund[f].err+=ag.err;
+      totals.pt+=ag.pt;totals.err+=ag.err;
+    });
+  });
+  html+='<tfoot><tr style="background:rgba(245,166,35,.08);border-top:2px solid rgba(245,166,35,.4)">';
+  html+='<td class="col-pl" style="color:var(--acc);font-family:var(--fh);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px">TOTALE</td>';
+  html+='<td class="col-sep col-tot-pt '+(totals.pt?'v-pt':'v-zero')+'" style="font-size:28px">'+(totals.pt||'-')+'</td>';
+  html+='<td class="col-sep col-tot-err '+(totals.err?'v-err':'v-zero')+'" style="font-size:28px">'+(totals.err||'-')+'</td>';
+  FUNDS_ORDER.forEach(function(f){
+    var t=totalsByFund[f];
+    html+='<td class="col-sep '+(t.pt?'v-pt':'v-zero')+'" style="font-size:28px">'+(t.pt||'-')+'</td>';
+    html+='<td class="'+(t.pos?'v-pos':'v-zero')+'" style="font-size:28px">'+(t.pos||'-')+'</td>';
+    html+='<td class="'+(t.neg?'v-neg':'v-zero')+'" style="font-size:28px">'+(t.neg||'-')+'</td>';
+    html+='<td class="'+(t.err?'v-err':'v-zero')+'" style="font-size:28px">'+(t.err||'-')+'</td>';
+  });
+  html+='</tr></tfoot>';
+
+  html+='</table></div>';
 
   // Avversari summary
   var ok=Object.keys(srcOpp);
@@ -2795,7 +2884,7 @@ function goPage(name){
     var dateEl=document.getElementById('match-date');if(dateEl)dateEl.value=matchDate;
     var locEl=document.getElementById('match-location');if(locEl)locEl.value=matchLocation;
   }
-  if(name==='roster'){renderSquadList();renderRoster();
+  if(name==='roster'){renderSquadList();renderRoster();renderGlobalPlayers();
     var lbl=document.getElementById('current-team-label');
     if(lbl)lbl.textContent=activeSquadIdx>=0?squads[activeSquadIdx].name:'–';
     var sec=document.getElementById('roster-section-lbl');if(sec)sec.style.display=activeSquadIdx>=0?'':'none';
@@ -2809,8 +2898,9 @@ function goPage(name){
 // ================================================================
 function exportBackup(){
   var data={
-    version:3,
+    version:4,
     date:new Date().toISOString(),
+    globalPlayers:globalPlayers,
     squads:squads,
     activeSquadIdx:activeSquadIdx,
     roster:roster,
@@ -2868,6 +2958,7 @@ function importBackup(ev){
         alert('File non valido o corrotto.');return;
       }
       // Ripristina tutti i dati
+      globalPlayers=data.globalPlayers||[];
       squads=data.squads||[];
       activeSquadIdx=data.activeSquadIdx!=null?data.activeSquadIdx:-1;
       roster=data.roster||(activeSquadIdx>=0&&squads[activeSquadIdx]?squads[activeSquadIdx].roster:[]);
@@ -2923,6 +3014,7 @@ function clearAllData(){
   // Cancella tutto il localStorage con le nostre chiavi
   Object.keys(localStorage).filter(function(k){return k.startsWith('vs15_');}).forEach(function(k){localStorage.removeItem(k);});
   // Reimposta variabili
+  globalPlayers=[];
   squads=[];activeSquadIdx=-1;
   roster=[];stats={};oppStats={};statsBySet={};oppStatsBySet={};
   convoked=[];starters=[];libero='';libero2='';roleAssign={};
@@ -2935,6 +3027,7 @@ function clearAllData(){
   formation=null;currentLineup=null;lastStat=null;
   updateScoreUI();updateTeamNames();
   renderSquadList();refreshMySquadSel();
+  renderGlobalPlayers();
   renderRoster();renderConvGrid();renderStarterGrid();
   renderCourt();renderStats();renderArchive();
   alert('Tutti i dati sono stati cancellati.');
@@ -2967,6 +3060,7 @@ if(!currentLineup && squads.length===0){
 }
 updateScoreUI();updateTeamNames();
 renderSquadList();refreshMySquadSel();
+renderGlobalPlayers();
 renderRoster();renderConvGrid();renderStarterGrid();
 renderCourt();renderStats();renderArchive();
 goPage('home');
