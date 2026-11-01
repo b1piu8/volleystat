@@ -262,7 +262,8 @@ html,body{background:var(--green);color:var(--text);font-family:var(--fb);height
 .gp-role{font-size:11px;color:var(--muted);}
 .gp-add-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:#ffffff;font-family:var(--fh);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;cursor:pointer;text-transform:uppercase;}
 .gp-add-btn:hover{background:rgba(255,255,255,.22);}
-.gp-add-btn.in-rosa{background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.4);color:var(--acc);cursor:default;}
+.gp-add-btn.in-rosa{background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.4);color:var(--acc);cursor:pointer;}
+.gp-add-btn.in-rosa:hover{background:rgba(231,76,60,.2);border-color:rgba(231,76,60,.5);color:#e74c3c;}
 .gp-add-btn.blocked{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:not-allowed;font-size:10px;}
 .gp-del{background:none;border:none;color:rgba(255,255,255,.3);font-size:16px;cursor:pointer;padding:0 4px;}
 .gp-del:hover{color:#e74c3c;}
@@ -1265,6 +1266,7 @@ function selectSquad(i){
   convoked=[];starters=[];libero='';libero2='';roleAssign={};formation=null;currentLineup=null;
   myTeamName=squads[i].name;
   save();renderSquadList();refreshMySquadSel();renderRoster();renderConvGrid();renderStarterGrid();
+  renderGlobalPlayers();
   updateScoreUI();updateTeamNames();
   document.getElementById('current-team-label').textContent=squads[i].name;
   // Mostra sezione aggiungi giocatore
@@ -1383,12 +1385,24 @@ function removeGlobalPlayer(id){
 function addFromGlobalToRoster(idx){
   if(activeSquadIdx<0){alert('Seleziona prima una squadra!');return;}
   var gp=globalPlayers[idx];if(!gp)return;
-  if(roster.find(function(p){return p.num===gp.num;})){return;} // già in rosa, ignora silenziosamente
-  var p={num:gp.num,name:gp.name,role:gp.role,gpId:gp.id};
-  roster.push(p);
+  var alreadyIdx=roster.findIndex(function(p){return p.gpId===gp.id;});
+  if(alreadyIdx>=0){
+    // Toggle: rimuovi dalla rosa
+    roster.splice(alreadyIdx,1);
+    convoked=convoked.filter(function(n){return n!==gp.num;});
+    starters=starters.filter(function(n){return n!==gp.num;});
+    if(libero===gp.num)libero='';
+    if(libero2===gp.num)libero2='';
+  } else {
+    // Aggiungi: controlla che il numero non sia già occupato da un altro giocatore
+    if(roster.find(function(p){return p.num===gp.num;})){
+      alert('Il numero '+gp.num+' è già occupato da un altro giocatore in questa squadra');return;
+    }
+    roster.push({num:gp.num,name:gp.name,role:gp.role,gpId:gp.id});
+    if(!stats[gp.num])stats[gp.num]={};
+  }
   squads[activeSquadIdx].roster=roster;
-  if(!stats[gp.num])stats[gp.num]={};
-  save();renderRoster();renderConvGrid();renderSquadList();renderGlobalPlayers();
+  save();renderRoster();renderConvGrid();renderStarterGrid();renderSquadList();renderGlobalPlayers();
 }
 function renderGlobalPlayers(){
   var RL={P:'Palleggiatore',S:'Schiacciatore',C:'Centrale',O:'Opposto',L:'Libero','':"–"};
@@ -1405,7 +1419,7 @@ function renderGlobalPlayers(){
       html+='<div class="gp-card" style="'+cardOpacity+'">'
         +'<div class="gp-num'+(gp.role==='L'?' lib':'')+'">'+gp.num+'</div>'
         +'<div class="gp-info">'+gp.name+'<div class="gp-role">'+(RL[gp.role]||'–')+'</div></div>'
-        +'<button class="'+btnCls+'"'+(numBlocked||thisInRoster?' disabled':'')+' onclick="addFromGlobalToRoster('+idx+')">'+btnLbl+'</button>'
+        +'<button class="'+btnCls+'"'+(numBlocked?' disabled':'')+' onclick="addFromGlobalToRoster('+idx+')">'+btnLbl+'</button>'
         +'<button class="gp-del" onclick="removeGlobalPlayer('+gp.id+')">×</button>'
         +'</div>';
     });
