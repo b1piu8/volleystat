@@ -1400,7 +1400,7 @@ function renderGlobalPlayers(){
       html+='<div class="gp-card">'
         +'<div class="gp-num'+(gp.role==='L'?' lib':'')+'">'+gp.num+'</div>'
         +'<div class="gp-info">'+gp.name+'<div class="gp-role">'+(RL[gp.role]||'–')+'</div></div>'
-        +(activeSquadIdx>=0?'<button class="gp-add-btn'+(inRoster?' in-rosa':'')+'" onclick="addFromGlobalToRoster('+idx+')">'+(inRoster?'✓ In rosa':'+ Aggiungi')+'</button>':'')
+        +'<button class="gp-add-btn'+(inRoster?' in-rosa':'')+'" onclick="addFromGlobalToRoster('+idx+')">'+(inRoster?'✓ In rosa':'+ Aggiungi')+'</button>'
         +'<button class="gp-del" onclick="removeGlobalPlayer('+gp.id+')">×</button>'
         +'</div>';
     });
