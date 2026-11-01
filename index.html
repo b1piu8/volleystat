@@ -263,6 +263,7 @@ html,body{background:var(--green);color:var(--text);font-family:var(--fb);height
 .gp-add-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:#ffffff;font-family:var(--fh);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;cursor:pointer;text-transform:uppercase;}
 .gp-add-btn:hover{background:rgba(255,255,255,.22);}
 .gp-add-btn.in-rosa{background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.4);color:var(--acc);cursor:default;}
+.gp-add-btn.blocked{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.3);cursor:not-allowed;font-size:10px;}
 .gp-del{background:none;border:none;color:rgba(255,255,255,.3);font-size:16px;cursor:pointer;padding:0 4px;}
 .gp-del:hover{color:#e74c3c;}
 
@@ -1383,7 +1384,7 @@ function addFromGlobalToRoster(idx){
   if(activeSquadIdx<0){alert('Seleziona prima una squadra!');return;}
   var gp=globalPlayers[idx];if(!gp)return;
   if(roster.find(function(p){return p.num===gp.num;})){return;} // già in rosa, ignora silenziosamente
-  var p={num:gp.num,name:gp.name,role:gp.role};
+  var p={num:gp.num,name:gp.name,role:gp.role,gpId:gp.id};
   roster.push(p);
   squads[activeSquadIdx].roster=roster;
   if(!stats[gp.num])stats[gp.num]={};
@@ -1396,11 +1397,15 @@ function renderGlobalPlayers(){
     html='<div style="color:var(--muted);font-size:12px;padding:6px 2px">Nessun giocatore in anagrafica</div>';
   } else {
     globalPlayers.forEach(function(gp,idx){
-      var inRoster=activeSquadIdx>=0&&!!roster.find(function(p){return p.num===gp.num;});
-      html+='<div class="gp-card">'
+      var thisInRoster=activeSquadIdx>=0&&!!roster.find(function(p){return p.gpId===gp.id;});
+      var numBlocked=!thisInRoster&&activeSquadIdx>=0&&!!roster.find(function(p){return p.num===gp.num;});
+      var btnCls='gp-add-btn'+(thisInRoster?' in-rosa':numBlocked?' blocked':'');
+      var btnLbl=thisInRoster?'✓ In rosa':numBlocked?'# occupato':'+ Aggiungi';
+      var cardOpacity=numBlocked?'opacity:.45;':'';
+      html+='<div class="gp-card" style="'+cardOpacity+'">'
         +'<div class="gp-num'+(gp.role==='L'?' lib':'')+'">'+gp.num+'</div>'
         +'<div class="gp-info">'+gp.name+'<div class="gp-role">'+(RL[gp.role]||'–')+'</div></div>'
-        +'<button class="gp-add-btn'+(inRoster?' in-rosa':'')+'" onclick="addFromGlobalToRoster('+idx+')">'+(inRoster?'✓ In rosa':'+ Aggiungi')+'</button>'
+        +'<button class="'+btnCls+'"'+(numBlocked||thisInRoster?' disabled':'')+' onclick="addFromGlobalToRoster('+idx+')">'+btnLbl+'</button>'
         +'<button class="gp-del" onclick="removeGlobalPlayer('+gp.id+')">×</button>'
         +'</div>';
     });
