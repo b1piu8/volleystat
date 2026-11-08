@@ -777,6 +777,10 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 <!-- ===== HOME PAGE ===== -->
 <div class="page active" id="page-home">
   <div class="home-page">
+    <div id="storage-warning" style="display:none;background:rgba(231,76,60,.18);border:1.5px solid rgba(231,76,60,.5);border-radius:10px;padding:12px 16px;margin-bottom:12px;font-size:13px;color:#ff6b6b;line-height:1.5;text-align:left">
+      <strong>⚠️ I dati non vengono salvati</strong><br>
+      <span id="storage-warning-msg"></span>
+    </div>
     <div>
       <div class="home-logo">Volley<span>Stat</span></div>
       <div class="home-logo-sub">Statistiche Pallavolo</div>
@@ -3107,9 +3111,35 @@ function clearAllData(){
 }
 // INIT
 document.getElementById('in-name').addEventListener('keydown',function(e){if(e.key==='Enter')addToRoster();});
+
+// Rileva problemi di storage prima di caricare
+(function(){
+  var warn=document.getElementById('storage-warning');
+  var msg=document.getElementById('storage-warning-msg');
+  // 1. File locale (file://)
+  if(location.protocol==='file:'){
+    warn.style.display='block';
+    msg.innerHTML='Stai aprendo l\'app come <b>file locale</b>. Safari cancella i dati ad ogni apertura.<br>'
+      +'Apri invece il sito web: <b><a href="https://b1piu8.github.io/volleystat" style="color:#ff6b6b">b1piu8.github.io/volleystat</a></b>';
+    return;
+  }
+  // 2. localStorage bloccato (Safari privato o restrizioni)
+  try{
+    var testKey='vs15_test';
+    localStorage.setItem(testKey,'1');
+    if(localStorage.getItem(testKey)!=='1'){throw new Error();}
+    localStorage.removeItem(testKey);
+  }catch(e){
+    warn.style.display='block';
+    msg.innerHTML='Il browser <b>blocca il salvataggio locale</b> (modalità privata o impostazioni Safari).<br>'
+      +'Disattiva la navigazione privata oppure vai in <b>Impostazioni → Safari → Avanzate → Privacy</b> e disabilita "Blocca tutto il tracciamento".';
+  }
+})();
+
 loadState();
-// Se non c'è nessuna gara configurata, inietta dati demo
-if(!currentLineup && squads.length===0){
+// Inietta dati demo solo al primo avvio assoluto (nessun dato mai salvato)
+var _neverSaved=!localStorage.getItem('vs15_squads')&&!localStorage.getItem('vs15_r');
+if(!currentLineup && squads.length===0 && _neverSaved){
   var demoSquad={name:'La Mia Squadra',roster:[
     {num:'1',name:'Rossi',role:'P'},
     {num:'4',name:'Bianchi',role:'S'},
