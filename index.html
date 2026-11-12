@@ -3169,16 +3169,48 @@ function runDiag(){
   }
   // 5. Ultimo salvataggio
   var lastSave=localStorage.getItem('vs15_last_save');
-  out.push('Ultimo save: '+(lastSave||'mai'));
-  // 6. Test save adesso
+  out.push('Ultimo save: '+(lastSave?lastSave.replace('T',' ').slice(0,19):'mai'));
+  // 6. Contenuto squadre in memoria
+  squads.forEach(function(sq,i){
+    out.push('Squadra['+i+']: "'+sq.name+'" → '+sq.roster.length+' giocatori in memoria');
+    sq.roster.forEach(function(p){out.push('  · #'+p.num+' '+p.name);});
+  });
+  out.push('roster var: '+roster.length+' giocatori');
+  out.push('activeSquadIdx: '+activeSquadIdx);
+  // 7. Contenuto localStorage ora
+  var sqRaw=localStorage.getItem('vs15_squads');
+  if(sqRaw){
+    try{
+      var sqSaved=JSON.parse(sqRaw);
+      sqSaved.forEach(function(sq,i){
+        out.push('SALVATA['+i+']: "'+sq.name+'" → '+(sq.roster||[]).length+' giocatori');
+      });
+    }catch(e){out.push('ERRORE lettura squads: '+e.message);}
+  } else {
+    out.push('vs15_squads: NON PRESENTE ❌');
+  }
+  // 8. Force save e rileggi
   save();
-  var afterSave=localStorage.getItem('vs15_squads');
-  out.push('Dopo save() squads: '+(afterSave?JSON.parse(afterSave).length+' squadre':'ANCORA VUOTO ❌'));
-  // 7. Totale storage usato
+  var sqAfter=localStorage.getItem('vs15_squads');
+  if(sqAfter){
+    try{
+      var sqA=JSON.parse(sqAfter);
+      sqA.forEach(function(sq,i){
+        out.push('DOPO SAVE['+i+']: "'+sq.name+'" → '+(sq.roster||[]).length+' giocatori');
+      });
+    }catch(e){out.push('ERRORE dopo save: '+e.message);}
+  } else {
+    out.push('DOPO SAVE: vs15_squads ancora vuoto ❌');
+  }
+  // 9. Totale storage usato
   try{
     var total=0;
-    Object.keys(localStorage).forEach(function(k){total+=localStorage.getItem(k).length;});
-    out.push('Storage usato: ~'+(total/1024).toFixed(1)+' KB');
+    Object.keys(localStorage).filter(function(k){return k.startsWith('vs15_');}).forEach(function(k){
+      var v=localStorage.getItem(k)||'';
+      total+=v.length;
+      if(k==='vs15_squads'||k==='vs15_gp'||k==='vs15_arch')out.push(k+': '+v.length+' chars');
+    });
+    out.push('Totale vs15_* storage: ~'+(total/1024).toFixed(1)+' KB');
   }catch(e){}
   document.getElementById('diag-out').innerHTML=out.join('<br>');
 }
