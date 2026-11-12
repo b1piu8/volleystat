@@ -935,9 +935,17 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
       <span>📋</span>
       <span>Squadra: <b id="current-team-label">–</b></span>
     </div>
-    <!-- ANAGRAFICA GLOBALE -->
-    <div class="sec-lbl">📋 Anagrafica giocatori</div>
+    <!-- SQUADRE -->
+    <div class="sec-lbl">🏐 Gestisci squadre</div>
     <div class="irow">
+      <input class="ifield" id="squad-in-name" type="text" placeholder="Nome squadra (es. Under16)">
+      <button class="abtn" onclick="addSquad()">+</button>
+    </div>
+    <div id="squad-list"></div>
+
+    <!-- AGGIUNGI GIOCATORE (alla squadra attiva + anagrafica) -->
+    <div class="sec-lbl" id="roster-section-lbl" style="display:none">Rosa: <span id="rc">0</span> giocatori</div>
+    <div class="irow" id="roster-add-row" style="display:none">
       <input class="ifield w60" id="gp-num" type="number" placeholder="##" min="1" max="99">
       <input class="ifield" id="gp-name" type="text" placeholder="Nome giocatore">
       <select class="ifield w110" id="gp-role">
@@ -948,19 +956,13 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         <option value="O">Opposto</option>
         <option value="L">Libero</option>
       </select>
-      <button class="abtn" onclick="addGlobalPlayer()">+</button>
+      <button class="abtn" onclick="addPlayerFull()">+</button>
     </div>
-    <div id="gp-list"></div>
-
-    <!-- SQUADRE -->
-    <div class="sec-lbl" style="margin-top:14px">🏐 Gestisci squadre</div>
-    <div class="irow">
-      <input class="ifield" id="squad-in-name" type="text" placeholder="Nome squadra (es. Under16)">
-      <button class="abtn" onclick="addSquad()">+</button>
-    </div>
-    <div id="squad-list"></div>
-    <div class="sec-lbl" id="roster-section-lbl" style="display:none">Rosa: <span id="rc">0</span> giocatori</div>
     <div id="roster-list"></div>
+
+    <!-- ANAGRAFICA GLOBALE (per aggiungere a altre squadre) -->
+    <div class="sec-lbl" style="margin-top:14px">📋 Anagrafica — aggiungi ad altre squadre</div>
+    <div id="gp-list"></div>
   </div>
 </div>
 
@@ -1354,18 +1356,7 @@ function renderTeams(){} // legacy noop
 // ROSTER
 // ================================================================
 function addToRoster(){
-  if(activeSquadIdx<0){alert('Seleziona prima una squadra!');return;}
-  var num=document.getElementById('in-num').value.trim();
-  var name=document.getElementById('in-name').value.trim();
-  var role=document.getElementById('in-role').value;
-  if(!num)return;
-  if(roster.find(function(p){return p.num===num;})){alert('Numero già presente');return;}
-  var p={num:num,name:name||'#'+num,role:role};
-  roster.push(p);
-  squads[activeSquadIdx].roster=roster; // sincronizza
-  if(!stats[num])stats[num]={};
-  document.getElementById('in-num').value='';document.getElementById('in-name').value='';
-  save();renderRoster();renderConvGrid();renderSquadList();
+  addPlayerFull(); // ora usa il form unificato
 }
 function removeFromRoster(num){
   roster=roster.filter(function(p){return p.num!==num;});
@@ -1398,17 +1389,33 @@ function renderRoster(){
 // ================================================================
 // ANAGRAFICA GLOBALE
 // ================================================================
-function addGlobalPlayer(){
+// Aggiunge alla squadra attiva E all'anagrafica globale in un colpo solo
+function addPlayerFull(){
   var num=document.getElementById('gp-num').value.trim();
   var name=document.getElementById('gp-name').value.trim();
   var role=document.getElementById('gp-role').value;
   if(!num||!name){alert('Inserisci numero e nome');return;}
+  if(activeSquadIdx<0){alert('Seleziona prima una squadra!');return;}
+  // Aggiungi alla rosa (se il numero non c'è già)
+  if(roster.find(function(p){return p.num===num;})){alert('Numero '+num+' già presente nella rosa');return;}
   var id=Date.now();
-  globalPlayers.push({id:id,num:num,name:name,role:role});
+  var p={num:num,name:name,role:role,gpId:id};
+  roster.push(p);
+  squads[activeSquadIdx].roster=roster;
+  if(!stats[num])stats[num]={};
+  // Aggiungi anche all'anagrafica globale (se non c'è già per nome+num)
+  var alreadyGlobal=globalPlayers.find(function(gp){return gp.num===num&&gp.name===name;});
+  if(!alreadyGlobal){
+    globalPlayers.push({id:id,num:num,name:name,role:role});
+  }
   document.getElementById('gp-num').value='';
   document.getElementById('gp-name').value='';
   document.getElementById('gp-role').value='';
-  save();renderGlobalPlayers();
+  save();renderRoster();renderConvGrid();renderSquadList();renderGlobalPlayers();
+}
+function addGlobalPlayer(){
+  // Ora punta alla stessa funzione unificata
+  addPlayerFull();
 }
 function removeGlobalPlayer(id){
   globalPlayers=globalPlayers.filter(function(p){return p.id!==id;});
@@ -3216,7 +3223,7 @@ function runDiag(){
 }
 
 // INIT
-document.getElementById('in-name').addEventListener('keydown',function(e){if(e.key==='Enter')addToRoster();});
+document.getElementById('gp-name').addEventListener('keydown',function(e){if(e.key==='Enter')addPlayerFull();});
 
 // Registra Service Worker (fondamentale per evitare che Safari ITP cancelli i dati)
 if('serviceWorker' in navigator){
