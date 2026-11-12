@@ -1223,38 +1223,45 @@ function loadState(){
   }
 }
 function save(){
-  localStorage.setItem('vs15_r',JSON.stringify(roster));
-  localStorage.setItem('vs15_s',JSON.stringify(stats));
-  localStorage.setItem('vs15_os',JSON.stringify(oppStats));
-  localStorage.setItem('vs15_sbs',JSON.stringify(statsBySet));
-  localStorage.setItem('vs15_osbs',JSON.stringify(oppStatsBySet));
-  localStorage.setItem('vs15_c',JSON.stringify(convoked));
-  localStorage.setItem('vs15_st',JSON.stringify(starters));
-  localStorage.setItem('vs15_l',libero);
-  localStorage.setItem('vs15_l2',libero2);
-  localStorage.setItem('vs15_ra',JSON.stringify(roleAssign));
-  localStorage.setItem('vs15_sr',window._startRot||0);
-  localStorage.setItem('vs15_lo',JSON.stringify(liberoOut));
-  // formation non viene salvata: viene sempre ricalcolata da buildFormation al caricamento
-  // currentLineup non viene salvato: viene sempre ricalcolato da gameLineupForRot al caricamento
-  localStorage.setItem('vs15_rot',curRot);
-  localStorage.setItem('vs15_ws',JSON.stringify(weServe));
-  localStorage.setItem('vs15_u',scoreUs);localStorage.setItem('vs15_t',scoreThem);
-  localStorage.setItem('vs15_su',setsUs);localStorage.setItem('vs15_st2',setsThem);
-  localStorage.setItem('vs15_cs',curSet);
-  localStorage.setItem('vs15_sh',JSON.stringify(setHistory));
-  localStorage.setItem('vs15_sl',JSON.stringify(subLog));
-  localStorage.setItem('vs15_teams',JSON.stringify(savedTeams));
-  localStorage.setItem('vs15_arch',JSON.stringify(archive));
-  localStorage.setItem('vs15_myname',myTeamName);
-  localStorage.setItem('vs15_oppname',oppTeamName);
-  localStorage.setItem('vs15_mdate',matchDate);
-  localStorage.setItem('vs15_mloc',matchLocation);
-  localStorage.setItem('vs15_mchamp',matchChampionship);
-  localStorage.setItem('vs15_to',timeoutCount);
-  localStorage.setItem('vs15_squads',JSON.stringify(squads));
-  localStorage.setItem('vs15_asq',activeSquadIdx);
-  localStorage.setItem('vs15_gp',JSON.stringify(globalPlayers));
+  var _saveErr=null;
+  function sw(key,val){
+    try{localStorage.setItem(key,typeof val==='string'?val:JSON.stringify(val));}
+    catch(e){if(!_saveErr)_saveErr=key+': '+e.message;console.error('save error',key,e);}
+  }
+  sw('vs15_r',roster);
+  sw('vs15_s',stats);
+  sw('vs15_os',oppStats);
+  sw('vs15_sbs',statsBySet);
+  sw('vs15_osbs',oppStatsBySet);
+  sw('vs15_c',convoked);
+  sw('vs15_st',starters);
+  sw('vs15_l',libero||'');
+  sw('vs15_l2',libero2||'');
+  sw('vs15_ra',roleAssign);
+  sw('vs15_sr',String(window._startRot||0));
+  sw('vs15_lo',liberoOut);
+  sw('vs15_rot',String(curRot||0));
+  sw('vs15_ws',weServe);
+  sw('vs15_u',String(scoreUs||0));
+  sw('vs15_t',String(scoreThem||0));
+  sw('vs15_su',String(setsUs||0));
+  sw('vs15_st2',String(setsThem||0));
+  sw('vs15_cs',String(curSet||1));
+  sw('vs15_sh',setHistory);
+  sw('vs15_sl',subLog);
+  sw('vs15_teams',savedTeams||[]);
+  sw('vs15_arch',archive);
+  sw('vs15_myname',myTeamName||'Noi');
+  sw('vs15_oppname',oppTeamName||'Avversari');
+  sw('vs15_mdate',matchDate||'');
+  sw('vs15_mloc',matchLocation||'');
+  sw('vs15_mchamp',matchChampionship||'');
+  sw('vs15_to',String(timeoutCount||0));
+  sw('vs15_squads',squads);
+  sw('vs15_asq',String(activeSquadIdx!=null?activeSquadIdx:-1));
+  sw('vs15_gp',globalPlayers);
+  if(_saveErr)console.error('SAVE FAILED on:',_saveErr);
+  localStorage.setItem('vs15_last_save',new Date().toISOString());
 }
 function getP(n){return roster.find(function(p){return p.num===n;});}
 
@@ -3152,7 +3159,14 @@ function runDiag(){
   } else {
     out.push('SW: ❌ non supportato da questo browser');
   }
-  // 5. Totale storage usato
+  // 5. Ultimo salvataggio
+  var lastSave=localStorage.getItem('vs15_last_save');
+  out.push('Ultimo save: '+(lastSave||'mai'));
+  // 6. Test save adesso
+  save();
+  var afterSave=localStorage.getItem('vs15_squads');
+  out.push('Dopo save() squads: '+(afterSave?JSON.parse(afterSave).length+' squadre':'ANCORA VUOTO ❌'));
+  // 7. Totale storage usato
   try{
     var total=0;
     Object.keys(localStorage).forEach(function(k){total+=localStorage.getItem(k).length;});
