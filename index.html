@@ -1074,6 +1074,13 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
       <div class="bk-desc">Elimina definitivamente tutti i dati salvati (roster, archivio, statistiche). Non può essere annullato.</div>
       <button class="abtn full" style="background:rgba(231,76,60,.25);border:1px solid rgba(231,76,60,.5);color:#e74c3c" onclick="clearAllData()">⚠ Cancella tutto</button>
     </div>
+
+    <div class="bk-card" style="border-color:rgba(245,166,35,.3)">
+      <div class="bk-icon">🔍</div>
+      <div class="bk-title">Diagnostica storage</div>
+      <div id="diag-out" style="font-size:12px;line-height:1.8;font-family:monospace;color:rgba(255,255,255,.8);margin:8px 0"></div>
+      <button class="abtn full" style="background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);color:var(--acc)" onclick="runDiag()">▶ Esegui test</button>
+    </div>
   </div>
 </div>
 
@@ -3115,6 +3122,45 @@ function clearAllData(){
   renderCourt();renderStats();renderArchive();
   alert('Tutti i dati sono stati cancellati.');
 }
+function runDiag(){
+  var out=[];
+  // 1. Protocollo
+  out.push('URL: '+location.href);
+  out.push('Protocollo: '+location.protocol);
+  // 2. Test scrittura localStorage
+  try{
+    localStorage.setItem('vs15_diag_test','ok_'+Date.now());
+    var v=localStorage.getItem('vs15_diag_test');
+    if(v&&v.startsWith('ok_')){out.push('✅ localStorage: scrittura OK');}
+    else{out.push('❌ localStorage: scritto ma non riletto!');}
+  }catch(e){out.push('❌ localStorage: BLOCCATO ('+e.message+')');}
+  // 3. Dati presenti
+  var sq=localStorage.getItem('vs15_squads');
+  var gp=localStorage.getItem('vs15_gp');
+  var ar=localStorage.getItem('vs15_arch');
+  out.push('Squadre salvate: '+(sq?JSON.parse(sq).length+' squadre':'nessuna'));
+  out.push('Anagrafica: '+(gp?JSON.parse(gp).length+' giocatori':'vuota'));
+  out.push('Archivio: '+(ar?JSON.parse(ar).length+' partite':'vuoto'));
+  out.push('In memoria ora: '+squads.length+' squadre, '+globalPlayers.length+' giocatori, '+archive.length+' partite');
+  // 4. Service Worker
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistration().then(function(reg){
+      var sw=reg?'✅ registrato ('+reg.scope+')':'❌ NON registrato';
+      document.getElementById('diag-out').innerHTML+=('<br>SW: '+sw);
+    });
+    out.push('SW: verifica in corso...');
+  } else {
+    out.push('SW: ❌ non supportato da questo browser');
+  }
+  // 5. Totale storage usato
+  try{
+    var total=0;
+    Object.keys(localStorage).forEach(function(k){total+=localStorage.getItem(k).length;});
+    out.push('Storage usato: ~'+(total/1024).toFixed(1)+' KB');
+  }catch(e){}
+  document.getElementById('diag-out').innerHTML=out.join('<br>');
+}
+
 // INIT
 document.getElementById('in-name').addEventListener('keydown',function(e){if(e.key==='Enter')addToRoster();});
 
