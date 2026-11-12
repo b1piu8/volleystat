@@ -1187,7 +1187,7 @@ var PILL={ace:'pg',kill:'pr',punto:'pg',in_gioco:'pb',perfetta:'pg',positiva:'pb
 
 function lj(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function loadState(){
-  roster=lj('vs15_r',[]);stats=lj('vs15_s',{});oppStats=lj('vs15_os',{});
+  roster=[];stats=lj('vs15_s',{});oppStats=lj('vs15_os',{});
   statsBySet=lj('vs15_sbs',{});oppStatsBySet=lj('vs15_osbs',{});
   convoked=lj('vs15_c',[]);starters=lj('vs15_st',[]);libero=localStorage.getItem('vs15_l')||'';
   libero2=localStorage.getItem('vs15_l2')||'';
@@ -1212,6 +1212,14 @@ function loadState(){
   timeoutCount=parseInt(localStorage.getItem('vs15_to')||'0');
   squads=lj('vs15_squads',[]);
   activeSquadIdx=parseInt(localStorage.getItem('vs15_asq')||'-1');
+  // IMPORTANTE: roster viene sempre preso dalla squadra attiva, non da vs15_r separato
+  // vs15_r è solo un fallback legacy per backup importati da versioni vecchie
+  if(activeSquadIdx>=0 && squads[activeSquadIdx]){
+    roster=squads[activeSquadIdx].roster||[];
+  } else {
+    var legacyRoster=lj('vs15_r',[]);
+    roster=legacyRoster;
+  }
   globalPlayers=lj('vs15_gp',[]);
   // Ricalcola sempre formation e currentLineup dalle tabelle aggiornate (mai dai valori salvati)
   if(roleAssign && Object.keys(roleAssign).length>=6){
