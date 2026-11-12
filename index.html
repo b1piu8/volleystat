@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>VolleyStat</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VolleyStat">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0d1535">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -3112,6 +3118,13 @@ function clearAllData(){
 // INIT
 document.getElementById('in-name').addEventListener('keydown',function(e){if(e.key==='Enter')addToRoster();});
 
+// Registra Service Worker (fondamentale per evitare che Safari ITP cancelli i dati)
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(e){console.warn('SW:', e);});
+  });
+}
+
 // Rileva problemi di storage prima di caricare
 (function(){
   var warn=document.getElementById('storage-warning');
@@ -3119,8 +3132,9 @@ document.getElementById('in-name').addEventListener('keydown',function(e){if(e.k
   // 1. File locale (file://)
   if(location.protocol==='file:'){
     warn.style.display='block';
-    msg.innerHTML='Stai aprendo l\'app come <b>file locale</b>. Safari cancella i dati ad ogni apertura.<br>'
-      +'Apri invece il sito web: <b><a href="https://b1piu8.github.io/volleystat" style="color:#ff6b6b">b1piu8.github.io/volleystat</a></b>';
+    msg.innerHTML='Stai aprendo l\'app come <b>file locale</b>: i dati vengono persi ad ogni chiusura.<br>'
+      +'➡️ Apri Safari e vai su: <b>b1piu8.github.io/volleystat</b><br>'
+      +'Poi tocca <b>Condividi → Aggiungi a schermata Home</b> per usarla come app.';
     return;
   }
   // 2. localStorage bloccato (Safari privato o restrizioni)
@@ -3131,8 +3145,9 @@ document.getElementById('in-name').addEventListener('keydown',function(e){if(e.k
     localStorage.removeItem(testKey);
   }catch(e){
     warn.style.display='block';
-    msg.innerHTML='Il browser <b>blocca il salvataggio locale</b> (modalità privata o impostazioni Safari).<br>'
-      +'Disattiva la navigazione privata oppure vai in <b>Impostazioni → Safari → Avanzate → Privacy</b> e disabilita "Blocca tutto il tracciamento".';
+    msg.innerHTML='Safari <b>blocca il salvataggio</b> (navigazione privata o restrizioni attive).<br>'
+      +'Controlla: <b>Impostazioni → Safari</b> → disattiva "Navigazione privata" e "Impedisci tracciamento cross-site".<br>'
+      +'Oppure tocca <b>Condividi → Aggiungi a schermata Home</b> per installare l\'app: i dati vengono sempre conservati.';
   }
 })();
 
